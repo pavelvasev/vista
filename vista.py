@@ -36,8 +36,21 @@ layers = data.loader.load( plotter )
 
 # Настройка видового окна
 plotter.set_background('white')
-plotter.show_grid(ztitle="Z (iteration)" ) #, n_xlabels=9)
+#grid_actor = plotter.show_grid(ztitle="Z (iteration)" ) #, n_xlabels=9)
 
+class MkGrid:
+  def __init__(self,plotter):
+    self.actor = None
+    self.plotter=plotter
+
+  def make(self,mesh=None):
+    plotter.remove_actor(self.actor)
+    # todo https://github.com/pyvista/pyvista/blob/6698923f73a1032bb3a42131d265b98b891e4836/pyvista/plotting/renderer.py#L1417
+    self.actor = self.plotter.show_grid(mesh=mesh,ztitle="Z (iteration)" ) #, n_xlabels=9)  
+
+gg = MkGrid(plotter)
+gg.make()
+  
 # plotter.show(auto_close=False)
 
 #    pass
@@ -72,6 +85,7 @@ class SetVisibilityCallback:
 
     def __call__(self, state):
         self.actor.SetVisibility(state)
+        gg.make( self.actor )
 
 
 gui = MAKEGUI(plotter)
