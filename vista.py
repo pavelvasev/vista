@@ -12,6 +12,13 @@ import numpy as np
 np.bool = np.bool_
 import pyvista as pv
 
+#import os
+#import sys
+#dir = os.path.dirname(__file__)
+#sys.path.append(dir)
+#importlib.import_module("data")
+
+# todo загружать из папки указанной в аргументе
 import data.loader
 
 coordinates = [] # координаты точек

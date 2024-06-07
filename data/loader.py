@@ -25,5 +25,5 @@ def load(plotter):
     w = importlib.import_module(p+'.loader')
     a = w.load(plotter)
     layers.append( [p,a] )
-    
+
   return layers
