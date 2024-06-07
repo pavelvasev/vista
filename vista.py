@@ -90,6 +90,13 @@ class SetVisibilityCallback:
 
 gui = MAKEGUI(plotter)
 
+for i in range( 0,len(layers),2 ):
+    name = layers[i]
+    actor = layers[i+1]  
+    print(name)
+    gui.addcb(name,SetVisibilityCallback(actor),True)
+
+"""
 for layer in layers:
     name = layer[0]
     actor = layer[1]  
@@ -97,6 +104,7 @@ for layer in layers:
     #   actor.SetVisibility(flag)
 
     gui.addcb(name,SetVisibilityCallback(actor),True)
+"""
 
 ######################33
 class SetCameraCallback:

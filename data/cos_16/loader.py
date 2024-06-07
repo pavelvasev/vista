@@ -3,7 +3,7 @@ import pyvista as pv
 
 K = 16
 
-def load(plotter):
+def load(name,plotter):
 	coordinates = [] # координаты точек
 	line_segs = [] # номера индексов координат, в семантике PolyData lines	
 	dir = os.path.dirname(__file__) + "/"
@@ -32,4 +32,4 @@ def load(plotter):
 	points = pv.PolyData(coordinates,lines=line_segs)
 	actor = plotter.add_mesh(points,line_width=5, color='red')	
 
-	return actor
+	return [name,actor]
