@@ -19,7 +19,8 @@ import pyvista as pv
 #importlib.import_module("data")
 
 # todo загружать из папки указанной в аргументе
-import data.loader
+#import data.loader
+import loaders.loader
 
 coordinates = [] # координаты точек
 line_segs = [] # номера индексов координат, в семантике PolyData lines
@@ -32,7 +33,8 @@ line_segs = [] # номера индексов координат, в семан
 # Создание окна для визуализации
 plotter = pv.Plotter()
 
-layers = data.loader.load( plotter )
+#layers = data.loader.load( plotter )
+layers = loaders.loader.load( "data2","data","", plotter )
 
 # Настройка видового окна
 plotter.set_background('white')
@@ -87,14 +89,30 @@ class SetVisibilityCallback:
         self.actor.SetVisibility(state)
         gg.make( self.actor )
 
+class SetVisibilityCallback2:
+    """Helper callback to keep a reference to the actor being modified."""
+
+    def __init__(self, actors, name):
+        self.actors = actors
+        self.name = name
+
+    def __call__(self, state):
+        for i in range(0,len(self.actors),2):
+            if self.actors[i] == self.name:
+                self.actors[i+1].SetVisibility(state)
+                gg.make( self.actors[i+1] )
 
 gui = MAKEGUI(plotter)
 
+added = dict()
 for i in range( 0,len(layers),2 ):
     name = layers[i]
-    actor = layers[i+1]  
+    actor = layers[i+1]
     print(name)
-    gui.addcb(name,SetVisibilityCallback(actor),True)
+    if not name in added:
+        fn = SetVisibilityCallback2(layers,name)
+        added[name] = True
+        gui.addcb(name,fn,True)
 
 """
 for layer in layers:
