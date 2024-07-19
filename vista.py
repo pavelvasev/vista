@@ -12,29 +12,27 @@ import numpy as np
 np.bool = np.bool_
 import pyvista as pv
 
-#import os
-#import sys
+import os
+import sys
 #dir = os.path.dirname(__file__)
 #sys.path.append(dir)
 #importlib.import_module("data")
 
 # todo загружать из папки указанной в аргументе
 #import data.loader
-import loaders.loader
+mdir = os.path.dirname(__file__)
+sys.path.insert(0,os.path.join(mdir,"loaders"))
 
-coordinates = [] # координаты точек
-line_segs = [] # номера индексов координат, в семантике PolyData lines
-# см https://docs.pyvista.org/version/stable/api/core/_autosummary/pyvista.PolyData.html
-# то есть описание ломаной это есть
-# кол-во вершин
-# номера вершин
-# и вот такие описания ломаных соединяются в один общий массив
+import loader
+import active
+loader.set_tablica( active.get_tablica() )
+# этот трюк нужен изза циклической зависимости loader -> dirs -> loader
 
 # Создание окна для визуализации
 plotter = pv.Plotter()
 
 #layers = data.loader.load( plotter )
-layers = loaders.loader.load( "data2","data","", plotter )
+layers = loader.load( "data3",plotter,[] )
 
 # Настройка видового окна
 plotter.set_background('white')
@@ -89,30 +87,46 @@ class SetVisibilityCallback:
         self.actor.SetVisibility(state)
         gg.make( self.actor )
 
-class SetVisibilityCallback2:
+class SetVisibilityCallback3:
     """Helper callback to keep a reference to the actor being modified."""
 
-    def __init__(self, actors, name):
+    def __init__(self, actors, all_labels, label):
         self.actors = actors
-        self.name = name
+        self.label = label
+        self.all_labels = all_labels
 
     def __call__(self, state):
+        # состояние метки
+        self.all_labels[self.label] = state
+
         for i in range(0,len(self.actors),2):
-            if self.actors[i] == self.name:
-                self.actors[i+1].SetVisibility(state)
-                gg.make( self.actors[i+1] )
+            this_actor_labels = self.actors[i]
+            visible = True
+            for name in this_actor_labels:
+                if not self.all_labels[name]:
+                    visible = False
+                    break
+            self.actors[i+1].SetVisibility(visible)
+        gg.make()
 
 gui = MAKEGUI(plotter)
 
-added = dict()
+# список всех меток
+# а заодно и видимостью будет
+all_labels = dict()
+
 for i in range( 0,len(layers),2 ):
-    name = layers[i]
-    actor = layers[i+1]
-    print(name)
-    if not name in added:
-        fn = SetVisibilityCallback2(layers,name)
-        added[name] = True
-        gui.addcb(name,fn,True)
+    labels = layers[i]
+    for name in labels:
+        all_labels[name] = True
+
+sorted_keys = list(all_labels.keys())
+sorted_keys.sort(reverse = True)
+
+for name in sorted_keys:
+    fn = SetVisibilityCallback3(layers,all_labels,name)
+    gui.addcb(name,fn,True)
+
 
 """
 for layer in layers:

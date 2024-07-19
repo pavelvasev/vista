@@ -9,6 +9,7 @@ import os
 dir = "."
 text_files = [f for f in os.listdir(dir) if f.endswith('.txt') and f.split(".")[0].isnumeric()]
 N = len(text_files)
+print("N=",N)
 #N=16
 
 norm = True
@@ -39,7 +40,7 @@ for i in range(0,N):
         # Значение для координаты z
         z_value = i
         if norm:
-           z_value = z_value / float(N)
+           z_value = z_value / float(N-1)
         print("z=",z_value)
 
         # собираем поверхность
@@ -82,7 +83,7 @@ for i in range(0,N):
                     faces.append([k,k+1,best_j])
                     faces.append([k+1,best_j,best_j+1])
 
-f = open("triangles.txt", "w")
+f = open("surf1.txt", "w")
 for face in faces:
     a = coordinates[ face[0] ]
     b = coordinates[ face[1] ]

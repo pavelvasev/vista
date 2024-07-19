@@ -7,12 +7,12 @@
 
 Установить библиотеки необходимые для работы:
 
-pip install pyvista[all] imageio[ffmpeg] numpy
+pip install -r requirements.txt
 
 ====== Запуск скрипта
 
 `python vista.py [data]`
-где data каталог данных.
+где data каталог данных (по умолчанию data3 из репозитория)
 
 ====== План
 - вернуть поверхность версия 1

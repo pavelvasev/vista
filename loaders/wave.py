@@ -5,34 +5,30 @@ import pyvista as pv
 
 #print("Wwww")
 
-def load(dir,name,suffix,plotter):
-	#name = os.path.basename(dir).split(".")[0]
-	#datatypy = os.path.basename(dir).split(".")[1]
-	if suffix != "wave":
-		return []
-
-	print("Wave load ",dir,"name=",name,"suffix=",suffix)
+def load(iid,itype,dir,N,plotter,parent_labels):
+	print("Wave load ",dir,N)
 	
-	norm = True
+	norm = True # todo параметр?
 
 	coordinates = [] # координаты точек
 	line_segs = [] # номера индексов координат, в семантике PolyData lines
 	#dir = os.path.dirname(__file__) + "/"
 
-	text_files = [f for f in os.listdir(dir) if f.endswith('.txt') and f.split(".")[0].isnumeric()]
-	K = len(text_files)
+    # нафиг всякие эвристики
+	#text_files = [f for f in os.listdir(dir) if f.endswith('.txt') and f.split(".")[0].isnumeric()]
+	#K = len(text_files)
 	# не наше
-	if K == 0:
-		return []
+	#if K == 0:
+    #return []
 
-	for i in range(0,K):
+	for i in range(0,N+1):
 	    # Загрузка данных из файла
 	    fname = dir+"/" + str(i)+".txt"
 	    print("loading i=",i,"fname=",fname)
 	    with open(fname, "r") as file:
 	        lines = file.readlines()
-	        if norm:
-	            z_value = i / float(K-1)  # Значение для координаты z
+	        if norm and (N > 1):
+	            z_value = i / float(N)  # Значение для координаты z
 	            
 	        print("z=",z_value)
 
@@ -51,4 +47,4 @@ def load(dir,name,suffix,plotter):
 	points = pv.PolyData(coordinates,lines=line_segs)
 	actor = plotter.add_mesh(points,line_width=5, color='red')
 
-	return [name,actor]
+	return [ [iid] + parent_labels,actor]

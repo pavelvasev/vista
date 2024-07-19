@@ -1,16 +1,14 @@
 import os
 import pyvista as pv
 
-def load(dir,name,suffix,plotter):
-	if not suffix == "surf":
-		return []
+def load(dir,file,itype,iid,plotter,parent_labels,color='blue',opacity=0.85):
 
 	#dir = os.path.dirname(__file__) + "/"
 	faces = []
 	coords = []
 
 	# Загрузка faces.txt
-	fname = os.path.join(dir,"triangles.txt")
+	fname = os.path.join(dir,file)
 	with open(fname, "r") as file:
 		lines = file.readlines()
 		f = 0
@@ -25,6 +23,9 @@ def load(dir,name,suffix,plotter):
 	#print("faces=",faces)
 
 	tetra = pv.PolyData.from_regular_faces(coords, faces)
-	actor = plotter.add_mesh(tetra,color='blue',opacity=0.85)
+	actor = plotter.add_mesh(tetra,color=color,opacity=opacity)
+	#,show_edges=True,edge_color='grey')
+	# show_edges=True
+	# ,style='wireframe'
 
-	return [name,actor]
+	return [ [iid]+parent_labels,actor]
