@@ -3,11 +3,13 @@ import sys
 
 
 import wave
+import wavep
 import surf
 import dirs
 
 tablica = {}
 tablica["wave"] = wave.load
+tablica["wavep"] = wavep.load
 tablica["triangles"] = surf.load
 tablica["subdirs"] = dirs.load
 

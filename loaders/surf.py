@@ -1,7 +1,7 @@
 import os
 import pyvista as pv
 
-def load(dir,file,itype,iid,plotter,parent_labels,color='blue',opacity=0.85):
+def load(dir,file,itype,iid,plotter,parent_labels,color='blue',opacity=0.85,show_edges=False,edge_color='grey'):
 
 	#dir = os.path.dirname(__file__) + "/"
 	faces = []
@@ -23,7 +23,7 @@ def load(dir,file,itype,iid,plotter,parent_labels,color='blue',opacity=0.85):
 	#print("faces=",faces)
 
 	tetra = pv.PolyData.from_regular_faces(coords, faces)
-	actor = plotter.add_mesh(tetra,color=color,opacity=opacity)
+	actor = plotter.add_mesh(tetra,color=color,opacity=opacity,show_edges=show_edges,edge_color=edge_color)
 	#,show_edges=True,edge_color='grey')
 	# show_edges=True
 	# ,style='wireframe'
