@@ -1,0 +1,11 @@
+frame:
+ type: wave
+ N: 8
+surf1:
+ type: triangles
+ file: surf1.txt
+surf2:
+ type: triangles
+ file: surf2.txt
+ color: cyan
+ opacity: 0.6
