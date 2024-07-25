@@ -1,0 +1,4 @@
+pyyaml
+pyvista[all]
+imageio[ffmpeg]
+numpy
